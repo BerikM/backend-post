@@ -13,7 +13,11 @@ class AuthController extends Controller
     {
         $login = $request->input('login');
         $password = $request->input('password');
-        $user = User::where('email', $login)->where('password', $password)->first();
+        // if (Auth::attempt(['email' => $login, 'password' => $password])) {
+            // return response()->json(['user'=>$user->name]);
+            // }
+            
+            $user = User::where('email', $login)->where('password', $password)->first();
         if ($user) {
             return response()->json(['user'=>$user->name]);
         } else {

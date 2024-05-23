@@ -18,7 +18,7 @@ class PostController extends Controller
 
         //?sortby=name&sortdir=desc
         $sortBy = $request->query('sortby', 'id');
-        $sortDir = strtolower($request->query('sortdir', 'asc'));
+        $sortDir = strtolower($request->query('sortdir', 'desc'));
         if(!in_array($sortBy, $allowedSortFields)) $sortBy = $allowedSortFields[0];
         if(!in_array($sortDir, $allowedSortDirections)) $sortBy = $allowedSortDirections[0];
         $collection->orderBy($sortBy, $sortDir);
@@ -42,6 +42,26 @@ class PostController extends Controller
         $collection->offset($offset);
 
         return $collection->get();
+    }
+
+    public function create(Request $request ){
+        $title = $request->input('title');
+        $content = $request->input('text');
+        $creator = $request->input('creator');
+        $votes_enable = $request->input('votes_enable');
+        $votes_name1 = $request->input('value1');
+        $votes_name2= $request->input('value2');
+        $post = new Post();
+        $post->title = $title;
+        $post->content = $content;
+        $post->creator = $creator;
+        $post->votes_enable = $votes_enable;
+        if($votes_enable){
+            $post->votes_name1 = $votes_name1;
+            $post->votes_name2 = $votes_name2;
+        }
+        $post->save();
+        return response()->json(['exists' => true]);
     }
 
     public function store(Request $request)
